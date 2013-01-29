@@ -1,0 +1,6 @@
+Jan. 27, 2013 (1.0.1.0)
++Open file filter: All supported file extensions, *.*
+*Quotes highlighting problems fixed.
+
+Jan. 27, 2013 (1.0.0.0)
+First release version.
