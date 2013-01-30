@@ -344,7 +344,14 @@ Friend Class tshEditor
             codeBlock = "@code.*?(@endcode|$)"
         End If
         For Each r As FastColoredTextBoxNS.Range In GetRanges(codeBlock, RegexOptions.Singleline)
-            For Each found As Range In r.GetRanges("\b(void|int|char)\s+(?<range>\w+)\b")
+            Dim check As String = ""
+            If langUsing = C Then
+                check = "void|char|float|double|int|long|short|const"
+            ElseIf langUsing = Java Then
+                check = "boolean|byte|char|double|float|int|long|short|void|enum|class|String|Boolean|Byte|" &
+                        "Char|Double|Float|Integer|Long|Short"
+            End If
+            For Each found As Range In r.GetRanges("\b(" + check + ")\s+(?<range>\w+)\b")
                 Range.SetStyle(functionStyle, "\b" + found.Text + "\b")
             Next
         Next
