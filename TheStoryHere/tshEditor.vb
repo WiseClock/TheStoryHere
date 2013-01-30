@@ -36,6 +36,7 @@ Friend Class tshEditor
     End Enum
 
     Friend Sub New()
+        ShowFoldingLines = True
         ImeMode = True
         AutoScrollMinSize = New Size(12, 15)
         BackBrush = Nothing
