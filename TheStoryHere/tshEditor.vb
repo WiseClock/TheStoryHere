@@ -19,6 +19,7 @@ Friend Class tshEditor
     Private wrongStyle As TextStyle = New TextStyle(Brushes.Blue, Brushes.LightPink, FontStyle.Regular)
 
     Private SameWordsStyle As MarkerStyle = New MarkerStyle(New SolidBrush(Color.FromArgb(40, Color.Gray)))
+    Private functionStyle As TextStyle = New TextStyle(Brushes.Blue, Nothing, FontStyle.Regular)
 
     Private WithEvents popupMenu As AutocompleteMenu = New AutocompleteMenu(Me) With {.SearchPattern = "[\w\.:=!<>]"}
 
@@ -99,7 +100,7 @@ Friend Class tshEditor
             'Numbers
             r.SetStyle(numberStyle, "\b[0-9]+(\.[0-9]+?)?\b")
             'Operators
-            r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)|\{|\}|\[|\]|\!", RegexOptions.None)
+            ''r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)|\{|\}|\[|\]|\!", RegexOptions.None)
             'Minor keywords
             Dim miKeywords As String = "auto|char|double|extern|float|int|long|register|short|static|typedef|" &
                                        "unsigned|enum|void|const|signed|volatile"
@@ -134,7 +135,7 @@ Friend Class tshEditor
             'Numbers
             r.SetStyle(numberStyle, "\b[0-9]+(\.[0-9]+?)?\b")
             'Operators
-            r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)|\{|\}|\[|\]|\!", RegexOptions.None)
+            ''r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)|\{|\}|\[|\]|\!", RegexOptions.None)
             'Minor keywords
             Dim miKeywords As String = "boolean|byte|char|double|float|int|long|short|void"
             'Major keywords
@@ -173,7 +174,8 @@ Friend Class tshEditor
             'Numbers
             r.SetStyle(numberStyle, "\b[0-9]+(\.[0-9]+?)?\b")
             'Operators
-            r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)", RegexOptions.None)
+            ''r.SetStyle(majorStyle, "\/|\*|\,|\.|\=|\+|\-|\;|\>|\<|\(|\)", RegexOptions.None)
+            r.SetStyle(majorStyle, "\,|\;|\(|\)", RegexOptions.None)
             'Minor keywords
             Dim miKeywords As String = "DATE|CHAR|VARCHAR|VARCHAR2|NUMBER|DECIMAL|FLOAT|INTEGER|LONG|SMALLINT"
             'Major keywords
@@ -329,6 +331,22 @@ Friend Class tshEditor
                     rr.SetStyle(SameWordsStyle)
                 Next
             End If
+        Next
+    End Sub
+
+    Private Sub tshEditor_TextChangedDelayed(ByVal sender As Object, ByVal e As FastColoredTextBoxNS.TextChangedEventArgs) Handles Me.TextChangedDelayed
+        Range.ClearStyle(functionStyle)
+        If Not (langUsing = C Or langUsing = Java) Then
+            Exit Sub
+        End If
+        Dim codeBlock As String = ".*"
+        If modeUsing = Note Then
+            codeBlock = "@code.*?(@endcode|$)"
+        End If
+        For Each r As FastColoredTextBoxNS.Range In GetRanges(codeBlock, RegexOptions.Singleline)
+            For Each found As Range In r.GetRanges("\b(void|int|char)\s+(?<range>\w+)\b")
+                Range.SetStyle(functionStyle, "\b" + found.Text + "\b")
+            Next
         Next
     End Sub
 End Class
