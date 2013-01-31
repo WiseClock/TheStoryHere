@@ -171,7 +171,6 @@ Friend Class tshEditor
             r.SetStyle(commentStyle, "--.*$", RegexOptions.Multiline)
             'Quotes
             r.SetStyle(quotesStyle, "'.*?([^\\]'|$)", RegexOptions.Singleline)
-            r.SetStyle(wrongStyle, """.*?([^\\]""|$)", RegexOptions.Singleline)
             'Numbers
             r.SetStyle(numberStyle, "\b[0-9]+(\.[0-9]+?)?\b")
             'Operators
@@ -202,6 +201,8 @@ Friend Class tshEditor
             r.SetStyle(wrongStyle, "\b(" + mKeywords + ")\b", RegexOptions.IgnoreCase)
             r.SetStyle(wrongStyle, "(" + mKeywordsNF + ")", RegexOptions.IgnoreCase)
             r.SetStyle(wrongStyle, "\b(" + miKeywords + ")\b", RegexOptions.IgnoreCase)
+            'Wrong quotes
+            r.SetStyle(wrongStyle, """.*?([^\\]""|$)", RegexOptions.Singleline)
         Next
     End Sub
 
