@@ -161,7 +161,6 @@ Friend Class tshEditor
             codeBlock = "@code.*?(@endcode|$)"
         End If
         For Each r As FastColoredTextBoxNS.Range In GetRanges(codeBlock, RegexOptions.Singleline)
-            r.SetFoldingMarkers("\(", "\)")
             'r.ClearStyle()
             If modeUsing = Note Then
                 r.SetFoldingMarkers("@\bcode\b", "@\bendcode\b", RegexOptions.IgnoreCase)
